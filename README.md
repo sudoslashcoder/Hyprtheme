@@ -46,7 +46,7 @@ run this after cloning the repo
 </code></pre>
 </div>
 
-
+Here are the keybinds, its pretty self explainatory
 >
   <pre>
 bind = $mainMod, Q, exec, $terminal
