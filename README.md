@@ -1,5 +1,7 @@
 this is my custom hyprland theme :) (i made the bar, theme inspired by nord theme, Nord theme repo here 
 https://github.com/a-lebailly/nord-dotfiles/commits?author=a-lebailly)
+![Taken on 14 of november](example.png)
+
 
 all dependencies for this theme (Arch based system) - yay required
 
@@ -30,3 +32,45 @@ then, install the dependencies, as required:
 
 (of course there are some optional packages included, but you can always delete those later)
 
+clone the repo using git
+
+>
+  <pre><code id="myCode">git clone https://github.com/sudoslashcoder/Hyprtheme/
+</code></pre>
+</div>
+
+run this after cloning the repo
+
+>
+  <pre><code id="myCode">~/Hyprtheme/Tstosetbarandminimaldesign.sh
+</code></pre>
+</div>
+
+
+>
+  <pre>
+bind = $mainMod, Q, exec, $terminal
+bind = $mainMod, X, killactive,
+bind = $mainMod, M, exit,
+bind = $mainMod, B, exec, /home/hyprusr/waybar.sh
+bind = $mainMod, E, exec, $fileManager
+bind = $mainMod SHIFT, SPACE, togglefloating,
+bind = $mainMod, R, exec, $menu
+bind = $mainMod, P, pseudo, # dwindle
+bind = $mainMod, J, togglesplit, # dwindle
+bind = $mainMod SHIFT, P, exec, hyprpicker
+bind = $mainMod SHIFT, S, exec, hyprshot -m region
+bind = , PRINT, exec, hyprshot -m output
+bind = $mainMod, PRINT, exec, hyprshot -m window
+bind = $mainMod, left, movefocus, l
+bind = $mainMod, right, movefocus, r
+bind = $mainMod, up, movefocus, u
+bind = $mainMod, down, movefocus, d
+</pre>
+</div>
+
+($mainMod is basically the Windows or Command key on Macbooks)
+
+
+This theme is made by sudoslashcoder, included Nord
+Thank you for clicking on this repo, and even more for using this theme :D
