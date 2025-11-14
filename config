@@ -1,0 +1,57 @@
+{
+  "layer": "top",
+  "position": "top",
+  "margin": 5,
+  "spacing": 8,
+
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["cpu", "memory", "network", "pulseaudio", "battery", "tray"],
+
+  "hyprland/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "󰲠", "2": "󰲢", "3": "󰲤", "4": "󰲦", "5": "󰲨",
+      "6": "󰲪", "7": "󰲬", "8": "󰲮", "9": "󰲰", "10": "󰲲"
+    }
+  },
+
+  "clock": {
+    "format": "{:%a %d %b  %H:%M}",
+    "tooltip-format": "{:%Y-%m-%d %H:%M:%S}"
+  },
+
+  "cpu": {
+    "format": "󰍛 {usage}%",
+    "tooltip": "cat /proc/stat | awk 'NR>1 {print \"Core\" NR-1\": \"$2+0 \"%\"\"}'",
+    "tooltip-format": "{output}"
+  },
+
+  "memory": {
+    "format": "󰍛 {used:0.1f}G",
+    "tooltip": false
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰖁  Mute",
+    "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+    "on-click": "pavucontrol",
+    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +2%",
+    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -2%"
+  },
+
+  "network": {
+    "format-wifi": "󰖩 {essid}",
+    "format-ethernet": "󰈀 {ifname}",
+    "format-disconnected": "󰤮",
+    "tooltip-format": "{ifname}: {ipaddr}"
+  },
+
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-icons": ["󰁺","󰁼","󰁾","󰂀","󰂂","󰁹"]
+  }
+}
