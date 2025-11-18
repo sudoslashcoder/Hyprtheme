@@ -1,6 +1,8 @@
 [this is my custom hyprland theme :) (i made the bar, theme inspired by nord theme, Nord theme repo here 
 https://github.com/a-lebailly/nord-dotfiles/commits?author=a-lebailly)
 
+<example.png>
+
 all dependencies for this theme (Arch based system) - yay required
 
 >
