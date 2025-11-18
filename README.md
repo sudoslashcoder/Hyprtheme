@@ -125,4 +125,4 @@ bindl = , XF86AudioPrev, exec, playerctl previous
 </div>
 
 
-thank you for clicking this repo on the first place, and thanks the crator of nord theme!
+thank you for clicking this repo on the first place, and thanks the creator of nord theme!
