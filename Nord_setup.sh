@@ -11,7 +11,7 @@ CONFIG_DIR="$HOME/.config"
 
 echo "===> Starting Nord rice setup..."
 
-# 1. Clone the nord-dotfiles repository
+# Clone the nord-dotfiles repository
 if [ -d "$DOTFILES_DIR" ]; then
     echo "Error: Directory '$DOTFILES_DIR' already exists. Please remove or rename it and rerun."
     exit 1
@@ -23,7 +23,7 @@ git clone "$REPO_URL" "$DOTFILES_DIR"
 echo "--> Installing core packages with pacman (may prompt for password)..."
 sudo pacman -Syu --noconfirm hyprland hyprpaper kitty waybar rofi wofi starship zsh git btop cava fastfetch
 
-# 3. Install AUR helper (yay) if not present
+#  Install AUR helper (yay) if not present
 if ! command -v yay &>/dev/null; then
     echo "--> Installing AUR helper 'yay'..."
     sudo pacman -S --needed --noconfirm base-devel git
@@ -36,7 +36,7 @@ fi
 # 4. (Optional) Install any additional AUR packages here
 # e.g., if a package is only in AUR: yay -S --noconfirm some-aur-package
 
-# 5. Install Nerd Fonts from assets
+# Install Nerd Fonts from assets
 echo "--> Installing Nerd Fonts..."
 mkdir -p "$HOME/.local/share/fonts"
 cp -r "$DOTFILES_DIR/assets/fonts/CaskaydiaCoveNerdFont"/* "$HOME/.local/share/fonts/" || {
@@ -47,7 +47,7 @@ if [ -d "$DOTFILES_DIR/assets/fonts/UbuntuNerdFont" ]; then
     cp -r "$DOTFILES_DIR/assets/fonts/UbuntuNerdFont"/* "$HOME/.local/share/fonts/"
 fi
 
-# 6. Copy/symlink config directories to ~/.config
+# Copy/symlink config directories to ~/.config
 echo "--> Setting up configuration files..."
 mkdir -p "$CONFIG_DIR"
 # Define an array of config directories/files to copy
@@ -66,7 +66,8 @@ for name in "${configs[@]}"; do
         echo "   Note: '$name' not found in dotfiles, skipping."
     fi
 done
-# 9. Update font cache
+#Update font cache
 echo "--> Updating font cache..."
 fc-cache -fv
-
+rm -rf ~/.config/hypr/hyprland.conf
+mv ~/Hyprtheme/hyprland.conf ~/.config/hypr/
