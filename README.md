@@ -1,4 +1,4 @@
-[this is my custom hyprland theme :) (i made the bar, theme inspired by nord theme, Nord theme repo here 
+this is my custom hyprland theme :) (i made the bar, theme inspired by nord theme, Nord theme repo here 
 https://github.com/a-lebailly/nord-dotfiles/commits?author=a-lebailly)
 
 ![Showcase](example.png)
