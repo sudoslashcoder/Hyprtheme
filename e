@@ -1,5 +1,5 @@
 #!/bin/bash
-# Waybar setup + Simplenote & Mousepad buttons (Hyprland)
+# Waybar setup + Weather-on-hover Clock (Hyprland)
 # Arch Hyprland, GTK-compatible
 
 set -euo pipefail
@@ -15,60 +15,25 @@ FONT='"CaskaydiaCove Nerd Font", "Ubuntu Nerd Font", sans-serif'
 CONFIG_DIR="$HOME/.config/waybar"
 WAYBAR_CONFIG="$CONFIG_DIR/config"
 WAYBAR_STYLE="$CONFIG_DIR/style.css"
-POWER_SCRIPT="$CONFIG_DIR/power_menu.sh"
 
 mkdir -p "$CONFIG_DIR"
 
-# Backup existing config
-for f in "$WAYBAR_CONFIG" "$WAYBAR_STYLE" "$POWER_SCRIPT"; do
-  [ -f "$f" ] && cp "$f" "$f.bak.$(date +%s)"
-done
-
-# --- POWER MENU SCRIPT (Zenity, centered) ---
-cat > "$POWER_SCRIPT" <<'EOF'
-#!/bin/bash
-# Floating, semi-transparent, centered power menu using Zenity
-
-ZENITY_TITLE="Power Menu"
-ZENITY_WIDTH=250
-ZENITY_HEIGHT=180
-
-selection=$(zenity --list \
-  --title="$ZENITY_TITLE" \
-  --text="Select an action" \
-  --column="Action" Shutdown Reboot Logout Lock Cancel \
-  --width=$ZENITY_WIDTH \
-  --height=$ZENITY_HEIGHT \
-  --ok-label="Select" \
-  --cancel-label="Cancel" \
-  --timeout=10
-)
-
-case "$selection" in
-    Shutdown) systemctl poweroff ;;
-    Reboot) systemctl reboot ;;
-    Logout) hyprctl dispatch exit ;;
-    Lock) swaylock ;;
-    Cancel|"") exit 0 ;;
-esac
-EOF
-chmod +x "$POWER_SCRIPT"
-
-# --- WAYBAR CONFIG (includes Simplenote & Mousepad buttons) ---
-cat > "$WAYBAR_CONFIG" <<EOF
+# --- WAYBAR CONFIG ---
+cat > "$WAYBAR_CONFIG" <<'EOF'
 {
   "layer": "top",
   "position": "top",
-  "margin": ${GAP},
+  "margin": 5,
   "spacing": 8,
 
   "modules-left": [
     "custom/launcher",
-    "hyprland/workspaces",
-],
+    "hyprland/workspaces"
+  ],
 
-  "modules-center": ["clock"],
-  "modules-right": ["cpu", "memory", "network", "pulseaudio", "battery", "tray", "custom/power"],
+  "modules-center": ["custom/clock"],
+
+  "modules-right": ["cpu", "memory", "network", "pulseaudio", "battery", "tray","custom/power"],
 
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -80,27 +45,27 @@ cat > "$WAYBAR_CONFIG" <<EOF
     }
   },
 
-  "clock": {
-    "format": "{:%a %d %b  %H:%M}",
-    "tooltip-format": "{:%Y-%m-%d %H:%M:%S}"
+  "custom/clock": {
+    "exec": "echo \"{ \\\"text\\\": \\\"$(date +'%a %d %b %H:%M')\\\" }\"",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{}",
+    "tooltip-format": "{}"
   },
 
   "cpu": {
-    "format": "󰍛 {usage}%",
-    "tooltip": "cat /proc/stat | awk 'NR>1 {print \"Core\" NR-1\": \"\$2+0 \"%\"\"}'",
-    "tooltip-format": "{output}"
+    "format": "󰍛 {usage}%"
   },
 
   "memory": {
     "format": "󰍛 {used:0.1f}G",
-    "tooltip": false,
     "interval": 1
   },
 
   "pulseaudio": {
     "format": "{icon} {volume}%",
-    "format-muted": "󰖁  Mute",
-    "format-icons": { "default": [ "󰕿","󰖀","󰕾" ] },
+    "format-muted": "󰖁 Mute",
+    "format-icons": { "default": ["󰕿","󰖀","󰕾"] },
     "on-click": "pavucontrol",
     "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +2%",
     "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -2%"
@@ -108,27 +73,29 @@ cat > "$WAYBAR_CONFIG" <<EOF
 
   "battery": {
     "format": "{icon} {capacity}%",
-    "format-icons": [ "󰁺","󰁼","󰁾","󰂀","󰂂","󰁹" ]
+    "format-icons": ["󰁺","󰁼","󰁾","󰂀","󰂂","󰁹"]
   },
 
-  "custom/power": {
-    "exec": "echo '⏻ '",
-    "interval": 0,
-    "tooltip": "Power Menu",
-    "on-click": "$POWER_SCRIPT"
-  },
   "network": {
     "format-wifi": "󰖩 {essid}",
     "format-ethernet": "󰈀 {ifname}",
     "format-disconnected": "󰤮",
     "tooltip-format": "{ifname}: {ipaddr}"
-  },  
+  },
+
   "custom/launcher": {
     "exec": "echo '   '",
     "interval": 0,
-    "tooltip": "lol",
-    "on-click": "sherlock"
+    "tooltip": "Launcher",
+    "on-click": "rofi -show drun -theme ~/.config/rofi/config.rasi"
   },
+
+  "custom/power": {
+    "exec": "echo '⏻  '",
+    "interval": 0,
+    "tooltip": "Launcher",
+    "on-click": "wlogout"
+  }
 }
 EOF
 
@@ -154,7 +121,6 @@ window#waybar {
 }
 
 #hyprland-workspaces button,
-#custom-power button,
 #custom-simplenote button,
 #custom-mousepad button {
   border-radius: 50%;
@@ -173,15 +139,14 @@ window#waybar {
 }
 
 #hyprland-workspaces button:hover,
-#custom-power button:hover,
 #custom-simplenote button:hover,
 #custom-mousepad button:hover {
   background: rgba(255,255,255,0.18);
   border-color: rgba(255,255,255,0.22);
 }
 
-#cpu, #memory, #network, #pulseaudio, #battery, #tray, #clock,
-#custom-power, #custom-simplenote, #custom-mousepad {
+#cpu, #memory, #network, #pulseaudio, #battery, #tray,
+#custom-simplenote, #custom-mousepad {
   margin: 0 8px;
   color: #ffffff;
 }
@@ -191,19 +156,6 @@ window#waybar {
 }
 EOF
 
-# --- HYPRLAND POWER MENU FLOAT RULES ---
-HYPR_CONF="$HOME/.config/hypr/hyprland.conf"
-
-if ! grep -q "Power Menu" "$HYPR_CONF"; then
-cat >> "$HYPR_CONF" <<'EOF'
-
-# Floating centered semi-transparent Power Menu
-windowrulev2 = float, title:Power Menu
-windowrulev2 = opacity:0.85, title:Power Menu
-windowrulev2 = center, title:Power Menu
-EOF
-fi
-
 # Reload Hyprland config
 hyprctl reload
 
@@ -211,5 +163,3 @@ hyprctl reload
 pkill waybar || true
 sleep 0.5
 waybar &
-
-echo "✅ Waybar setup complete — now includes Simplenote + Mousepad buttons."
